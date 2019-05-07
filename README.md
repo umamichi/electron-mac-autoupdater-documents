@@ -278,9 +278,7 @@ S3にビルド後の以下のファイルをアップロードする
 
 ### Electron を起動しているJSファイルで autoUpdater を呼び出す
 
-まだ資料に落とし込む途中なので、Github のリンク↓
-
-https://github.com/team-lab/facetouch-messenger/blob/feature/add-auto-updater/app/main.development.js#L40-L82
+...
 
 `autoUpdater.quitAndInstall();` でインストールと再起動される
 
