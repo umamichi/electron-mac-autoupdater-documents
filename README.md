@@ -297,7 +297,7 @@ S3にビルド後の以下のファイルをアップロードする
 
 + Mac の App Store 経由でインストール&アップデートする方法
 
-+ 今回試した内容だと、`Certificates` だけで良いのでは・・？（ Provisioning Profile は App Store 経由にするときに、必要になる？）
++ 今回試した内容だと、`Certificates` だけで良いのでは・・？（ Provisioning Profile は App Store 経由にするときに、必要になる？）
 
 
 ## やったことメモ
