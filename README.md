@@ -104,7 +104,7 @@ Windowsストア経由にしない場合は、不要
 
   開発用にビルドするときに使う
 
-1. Production 証明証
+2. Production 証明証
 
   本番で、Apple Store 公開するときに使う
 
@@ -280,7 +280,6 @@ S3にビルド後の以下のファイルをアップロードする
 ### Electron を起動しているJSファイルで autoUpdater を呼び出す
 
 
-
 メインプロセス
 ```javascript
 import { ipcMain } from 'electron';
@@ -373,7 +372,6 @@ IPC通信を用いてレンダラプロセスに値を送り、UIに反映する
 + Mac の App Store 経由でインストール&アップデートする方法
 
 + 今回試した内容だと、`Certificates` だけで良いのでは・・？（ Provisioning Profile は App Store 経由にするときに、必要になる？）
-
 
 
 ## 参考
