@@ -104,7 +104,7 @@ Windowsストア経由にしない場合は、不要
 
   開発用にビルドするときに使う
 
-1. Production 証明証
+2. Production 証明証
 
   本番で、Apple Store 公開するときに使う
 
