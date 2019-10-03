@@ -100,15 +100,19 @@ Windowsストア経由にしない場合は、不要
 
 証明証は2種類ある
 
-1. Development 証明証 ＝ 開発用にビルドするときに使う
+1. Development 証明証
 
-2. Production 証明証 ＝ 本番で、Apple Store 公開するときに使う
+  開発用にビルドするときに使う
+
+2. Production 証明証
+
+  本番で、Apple Store 公開するときに使う
 
 今回は Development 証明証を取得してみます
 
 必要な証明証は以下の2つ
 
-  + **Certificates** （サーティフィケイツ）
+  1. **Certificates** （サーティフィケイツ）
 
 　　開発者登録用の証明書
 
@@ -116,7 +120,7 @@ Windowsストア経由にしない場合は、不要
 
 　　拡張子は `.cer`
 
-  + **Provisioning Profile** （プロビジョニング プロファイル）
+  2. **Provisioning Profile** （プロビジョニング プロファイル）
 
 　　`Certificates` `Devices` `App ID` を合わせて作られたもの
 
@@ -277,7 +281,6 @@ S3にビルド後の以下のファイルをアップロードする
 
 
 メインプロセス
-
 ```javascript
 import { ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
