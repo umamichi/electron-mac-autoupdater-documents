@@ -6,7 +6,7 @@
 
 オンラインで配布するソフトウェアに**デジタル署名**を行う電子署名用の証明書
 
-<img src="images/8.gif">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/8.gif">
 
 👆コードサイニング証明書で署名されていないソフトウェアは改ざんを受けている可能性があるため、インストール時に警告が表示される
 
@@ -27,7 +27,7 @@
 
 ### 署名（開発側の処理）
 
-<img src="images/9.gif">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/9.gif">
 
 1. コードサイニング証明書取得
 1. オリジナルコード（＝ソフトウェアのプログラムデータ）から、ハッシュ値を生成
@@ -53,7 +53,7 @@ SHA1(sample.txt)= fbe5aefc2fcbf125965974a476523b56baf632e1
 
 ### 検証（ユーザー側の処理）
 
-<img src="images/10.gif">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/10.gif">
 
 1. 証明書の有効性の確認と公開鍵の取得
 1. `コード` `暗号化されたハッシュ値（デジタル署名）` に分離
@@ -100,19 +100,15 @@ Windowsストア経由にしない場合は、不要
 
 証明証は2種類ある
 
-1. Development 証明証
+1. Development 証明証 ＝ 開発用にビルドするときに使う
 
-  開発用にビルドするときに使う
-
-2. Production 証明証
-
-  本番で、Apple Store 公開するときに使う
+2. Production 証明証 ＝ 本番で、Apple Store 公開するときに使う
 
 今回は Development 証明証を取得してみます
 
 必要な証明証は以下の2つ
 
-  1. **Certificates** （サーティフィケイツ）
+  + **Certificates** （サーティフィケイツ）
 
 　　開発者登録用の証明書
 
@@ -120,7 +116,7 @@ Windowsストア経由にしない場合は、不要
 
 　　拡張子は `.cer`
 
-  2. **Provisioning Profile** （プロビジョニング プロファイル）
+  + **Provisioning Profile** （プロビジョニング プロファイル）
 
 　　`Certificates` `Devices` `App ID` を合わせて作られたもの
 
@@ -137,13 +133,13 @@ Windowsストア経由にしない場合は、不要
 
 キーチェーンアクセス → 証明書アシスタント → 認証局に証明書を要求
 
-<img src="images/1.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/1.png">
 
-<img src="images/2.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/2.png">
 
 ローカルに `CertificateSigningRequest.certSigningRequest` ファイルが保存される
 
-<img src="images/4.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/4.png">
 
 次に、このファイルを使って `Certificates` を取得する
 
@@ -155,7 +151,7 @@ https://developer.apple.com/account/
 
 `Certificates, IDs & Profiles` → 左上プルダウンは `macOS` → `Certificates` 項目の `Development` → 右上 `+` マーク
 
-<img src="images/3.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/3.png">
 
 
 `Mac Development` を選択し、進めていく
@@ -164,21 +160,21 @@ https://developer.apple.com/account/
 
 最後に生成された `Certificates` をダウンロードする
 
-<img src="images/5.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/5.png">
 
 これを実行すると、キーチェーンに証明証が追加され、完了
 
-<img src="images/6.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/6.png">
 
 ### Electron Builder でビルド時に表示されるコンソールがこのように変わればOK
 
 ▼ `Certificates` インストール前
 
-<img src="images/11.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/11.png">
 
 ▼ `Certificates` インストール後
 
-<img src="images/12.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/12.png">
 
 このように、キーチェーンに登録されている `Certificates` を Electron Builder がビルド時に自動的に見にいくようになっている
 
@@ -202,29 +198,29 @@ https://developer.apple.com/account/
 
 `App ID` は `Apple Developer Program` の画面から新規登録できる
 
-<img src="images/13.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/13.png">
 
 [app ID登録の詳細手順はこちらのApple公式サイト参照](https://help.apple.com/developer-account/#/dev1b35d6f83)
 
 `App ID` が登録できたら、いよいよ `Provisioning Profile` を新規作成する
 
-<img src="images/7.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/7.png">
 
 `App ID` を選択する画面が出てくるので、先ほど新規登録した `App ID` を選択して進める
 
 これで、`App ID` に紐づいた `Provisioning Profile` が作成される
 
-<img src="images/14.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/14.png">
 
 ダウンロードしたファイルを実行することで、プロファイルに`Provisioning Profile`が追加される
 
-<img src="images/15.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/15.png">
 
 <!-- この状態で、Electron をビルドしてみる
 
 まだ `provisioningProfile=none` と表示される・・🤔
 
-<img src="images/16.png"> -->
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/16.png"> -->
 
 
 さらに、`package.json` に `appId` というキー名で `Bundle ID` を追加しておく必要がある
@@ -250,7 +246,7 @@ Certificateだけあれば良い？ -->
 
 S3にビルド後の以下のファイルをアップロードする
 
-<img src="images/17.png">
+<img src="https://github.com/umamichi/electron-mac-autoupdater-documents/raw/master/images/17.png">
 
 ### package.json に S3 URL を追記する
 
@@ -281,6 +277,7 @@ S3にビルド後の以下のファイルをアップロードする
 
 
 メインプロセス
+
 ```javascript
 import { ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
