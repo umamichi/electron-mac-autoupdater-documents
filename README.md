@@ -267,6 +267,7 @@ S3にビルド後の以下のファイルをアップロードする
         }
       ]
     }
+    ...
 ```
 
 ここでハマりやすいのが、 `latest-mac.yml` があるディレクトリのURLを指定すること
@@ -278,31 +279,101 @@ S3にビルド後の以下のファイルをアップロードする
 
 ### Electron を起動しているJSファイルで autoUpdater を呼び出す
 
-まだ資料に落とし込む途中なので、Github のリンク↓
 
-https://github.com/team-lab/facetouch-messenger/blob/feature/add-auto-updater/app/main.development.js#L40-L82
 
-`autoUpdater.quitAndInstall();` でインストールと再起動される
+メインプロセス
+```javascript
+import { ipcMain } from 'electron';
+import { autoUpdater } from 'electron-updater';
+
+const log = require('electron-log');
+
+... // 省略
+
+// オートアップデーターからログが出力されるようにする。ログレベルは、Info
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+
+// 最新バージョンがあるか、チェック開始
+autoUpdater.checkForUpdates();
+
+// アップデート可能な場合、レンダラプロセスに 'update-available' を送る
+autoUpdater.addListener('update-available', (event) => {
+ mainWindow.webContents.send('update-available');
+ log.info('update-available');
+});
+
+// アップデート不可能な場合、レンダラプロセスに 'update-not-available' を送る
+autoUpdater.addListener('update-not-available', () => {
+ mainWindow.webContents.send('update-not-available');
+ log.info('update-not-available');
+});
+
+// 失敗した場合、レンダラプロセスに 'update-error' を送る
+autoUpdater.addListener('error', (error) => {
+ mainWindow.webContents.send('update-error');
+ log.info(error);
+});
+
+// ダウンロード中
+autoUpdater.on('download-progress', (progressObj) => {
+ mainWindow.webContents.send('update-download-progress', Math.floor(progressObj.percent));
+ log.info('update-download-progress', Math.floor(progressObj.percent) + '%');
+});
+
+// ダウンロード完了
+autoUpdater.addListener('update-downloaded', (
+ event,
+ releaseNotes,
+ releaseName,
+ releaseDate,
+ updateURL,
+) => {
+ this.mainWindow.webContents.send('update-downloaded');
+ log.info('update-downloaded');
+
+ console.log('auto update done! quit and install start ---!');
+ log.info('auto update done! quit and install start ---!');
+
+ // Install and Reboot
+ autoUpdater.quitAndInstall();
+
+ return true;
+});
+```
+
+まず、以下メソッドでチェックを開始する
+
+`autoUpdater.checkForUpdates();`
+
+アップデートが可能な場合、不可能な場合、それぞれイベントが定義されているので
+
+それぞれに応じて、任意の処理を実行することができる
+
+`download-progress` では、ダウンロードのパーセンテージの取得が可能
+
+IPC通信を用いてレンダラプロセスに値を送り、UIに反映することもできる
+
+最後に、
+
+`autoUpdater.quitAndInstall();` でインストールと再起動がされる
 
 
 ## まとめ
 
 + Mac で `electron-builder` を使って Electron をビルドするときは、`electron-builder` が Mac のキーチェーンアクセスの中の証明書をみにいくようになっている
 
-+ Mac で Electron　autoUpdater をする場合は、証明書が必要で、そのためには Apple Developer Program（$100/Year）に入る必要がある
++ Mac で Electron autoUpdater をする場合は、証明書が必要で、そのためには Apple Developer Program（$100/Year）に入る必要がある
 
-+ Windowsの場合は、証明書は必要ない
++ Windowsの場合は、Electron autoUpdater をするときに、証明書は必要ない
 
-+ Store経由はこれから検証します・・
 
 ## これから検証
 
 + Mac の App Store 経由でインストール&アップデートする方法
 
-+ 今回試した内容だと、`Certificates` だけで良いのでは・・？（ Provisioning Profile は App Store 経由にするときに、必要になる？）
++ 今回試した内容だと、`Certificates` だけで良いのでは・・？（ Provisioning Profile は App Store 経由にするときに、必要になる？）
 
-
-## やったことメモ
 
 
 ## 参考
